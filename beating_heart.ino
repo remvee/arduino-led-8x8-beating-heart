@@ -1,8 +1,10 @@
-#include "WProgram.h"
+/*
+ * Beating heart on 8x8 LED using Arduino UNO
+ *
+ * Copyright (C) 2011, 2015 R.W. van 't Veer
+ */
 
-// byte cols[8] = {13, 3, 5, 10, 6, 11, 15, 16};
 byte cols[8] = {13, 6, 5, 10, 3, 11, 15, 16};
-//byte rows[8] = {9, 14, 8, 12, 1, 7, 2, 5};
 byte rows[8] = {9, 14, 1, 12, 8, 2, 7, 4};
 byte tran[16] = {13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, A0, A1, A2, A3};
 
