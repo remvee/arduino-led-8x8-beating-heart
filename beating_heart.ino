@@ -4,19 +4,10 @@
  * Copyright (C) 2011, 2015 R.W. van 't Veer
  */
 
-byte cols[8] = {13, 6, 5, 10, 3, 11, 15, 16};
-byte rows[8] = {9, 14, 1, 12, 8, 2, 7, 4};
-byte tran[16] = {13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, A0, A1, A2, A3};
+#include <FrequencyTimer2.h>
 
-void setup () {
-  for (int i = 0; i < 16; i++) {
-    pinMode(tran[i], OUTPUT);
-  }
-  for (int i = 0; i < 8; i++) {
-    digitalWrite(tran[cols[i] - 1], LOW);
-    digitalWrite(tran[rows[i] - 1], LOW);
-  }
-}
+byte row[8] = { 2, 7, 19, 5, 13, 18, 12, 16 };
+byte col[8] = { 6, 11, 10, 3, 17, 4, 8, 9 };
 
 byte heart[8][8] = {{ 0, 0, 0, 0, 0, 0, 0, 0 },
                     { 0, 1, 1, 0, 1, 1, 0, 0 },
@@ -27,22 +18,41 @@ byte heart[8][8] = {{ 0, 0, 0, 0, 0, 0, 0, 0 },
                     { 0, 0, 0, 1, 0, 0, 0, 0 },
                     { 0, 0, 0, 0, 0, 0, 0, 0 }};
 
-void display (int duration) {
-  for (int i = duration * 1000; i > 0; i -= 250) {
-    for (int row = 0; row < 8; row++) {
-      digitalWrite(tran[rows[row] - 1], HIGH);
-      for (int col = 0; col < 8; col++) {
-        digitalWrite(tran[cols[col] - 1], heart[row][col] == 1 ? LOW : HIGH);
-        delayMicroseconds(250);
-        digitalWrite(tran[cols[col] - 1], HIGH);
+boolean visible = 0;
+
+void display() {
+  for (int y = 0; y < 8; y++) {
+    digitalWrite(row[y], HIGH);
+    for (int x = 0; x < 8; x++) {
+      int thisPixel = (heart[y][x] && visible) ? LOW : HIGH;
+      digitalWrite(col[x], thisPixel);
+      if (thisPixel == LOW) {
+        digitalWrite(col[x], HIGH);
       }
-      digitalWrite(tran[rows[row] - 1], LOW);
     }
+    digitalWrite(row[y], LOW);
   }
 }
-void loop () {
-  display(2);
-  delay(150);
-  display(4);
-  delay(500);
+
+void setup() {
+  for (int i = 0; i < 8; i++) {
+    pinMode(col[i], OUTPUT);
+    pinMode(row[i], OUTPUT);
+    digitalWrite(col[i], HIGH);
+  }
+
+  FrequencyTimer2::disable();
+  FrequencyTimer2::setPeriod(2000);
+  FrequencyTimer2::setOnOverflow(display);
+}
+
+void loop() {
+  visible = 1;
+  delay(200);
+  visible = 0;
+  delay(300);
+  visible = 1;
+  delay(200);
+  visible = 0;
+  delay(750);
 }

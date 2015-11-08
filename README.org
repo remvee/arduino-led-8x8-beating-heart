@@ -8,15 +8,15 @@
 
    - Arduino UNO
    - 8x8 LED matrix
-   - 220Ω resistors (16x)
-   - some breadboards / wiring / solder
+   - some breadboards and wiring
 
-   See the [[wiring.jpg]] photo in this directory for an example.
+   See the [[wiring.png]] photo in this directory for an example.
 
 ** Software
 
    Requirements:
 
+   - [[http://playground.arduino.cc/Code/FrequencyTimer2][FrequencyTimer2]]
    - arduino-mk
 
    Review the [[Makefile]] to change variable to reflect your setup and run:
